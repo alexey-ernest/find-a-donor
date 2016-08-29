@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "webpack-dev-server --config ./configs/webpack.dev.js --progress --inline --colors",
+    "build": "webpack --config ./configs/webpack.production.js --progress --colors",
+    "lint": "eslint src",
     "test": "mocha test --recursive"
   },
   "repository": {
@@ -24,16 +27,51 @@
     "url": "https://github.com/alexey-ernest/find-a-donor/issues"
   },
   "homepage": "https://github.com/alexey-ernest/find-a-donor#readme",
-  "devDependencies": {
-    "async": "^2.0.1",
+  "dependencies": {
     "body-parser": "^1.15.2",
-    "chai": "^3.5.0",
     "debug": "^2.2.0",
     "express": "^4.14.0",
-    "mocha": "^3.0.2",
     "mongoose": "^4.5.10",
     "morgan": "^1.7.0",
+    "classnames": "^2.1.3",
+    "flux": "^2.0.1",
+    "keymirror": "~0.1.0",
+    "material-ui": "^0.15.4",
+    "object-assign": "^1.0.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-tap-event-plugin": "^1.0.0"
+  },
+  "devDependencies": {
+    "async": "^2.0.1",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
     "supertest": "^2.0.0",
-    "uuid": "^2.0.2"
+    "babel-core": "^6.13.2",
+    "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "breakpoint-sass": "^2.7.0",
+    "compass-mixins": "^0.12.10",
+    "css-loader": "^0.23.1",
+    "eslint": "^3.3.1",
+    "eslint-plugin-react": "^6.1.2",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "html-webpack-plugin": "^2.22.0",
+    "node-sass": "^3.8.0",
+    "raw-loader": "^0.5.1",
+    "react-hot-loader": "^1.3.0",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "susy": "^2.2.12",
+    "transfer-webpack-plugin": "^0.1.4",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.14.1"
   }
 }

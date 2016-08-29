@@ -1,0 +1,51 @@
+// Type modular scale system based on 1.414 ratio
+
+$base-font-size: 1rem;
+$ms-ratio: 1.414;
+$ms-levels: 6;
+$line-height-factor: 1.25;
+$base-line-height: $base-font-size * $line-height-factor;
+
+
+// Define type modular scale map
+$type-scale: (
+  -1: 1rem / $ms-ratio,  // small text
+  0: 1rem                 // body text
+);
+
+@for $i from 1 through $ms-levels {
+  $type-scale: map-merge($type-scale, ($i: map-get($type-scale, $i - 1) * $ms-ratio));
+}
+
+@function type-scale($level) {
+  @return map-get($type-scale, $level);
+}
+
+
+// Define line heights
+$line-heights: (
+  -1: $base-line-height,
+  0: $base-line-height,
+  1: $base-line-height * 2,
+  2: $base-line-height * 2
+);
+
+@for $i from 1 through $ms-levels {
+  $line-heights: map-merge($line-heights, ($i: ceil(map-get($type-scale, $i)) * $line-height-factor));
+}
+
+@function line-height($level) {
+  @return map-get($line-heights, $level);
+}
+
+
+// Type setting mixin
+@mixin type-setting($level: 0) {
+  font-size: type-scale($level);
+  line-height: line-height($level);
+}
+
+// Vertycal rhythm helper function
+@function rhythm($lines) {
+  @return $base-line-height * $lines;
+}

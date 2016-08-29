@@ -1,0 +1,43 @@
+@import "../typography"
+
+// Base typography
+html
+  font-size: 1em
+
+body
+  font-family: Roboto, serif
+  font-weight: 300
+  color: #333
+  +type-setting(0)
+
+p
+  margin-bottom: rhythm(1)
+
+strong
+  font-weight: 400
+
+.ms-down-1
+  +type-setting(-1)
+
+@for $i from 1 through $ms-levels
+  .ms-up-#{$i}
+    font-weight: 100
+    +type-setting($i)
+
+.ms-up-6
+  margin-bottom: rhythm(3)
+
+.ms-up-5
+  margin-bottom: rhythm(3)
+
+.ms-up-4
+  margin-bottom: rhythm(2)
+
+.ms-up-3
+  margin-bottom: rhythm(2)
+
+.ms-up-2
+  margin-bottom: rhythm(1)
+
+.ms-up-1
+  margin-bottom: rhythm(1)

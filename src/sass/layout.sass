@@ -1,0 +1,22 @@
+// Grid
+@import "susy"
+
+// Breakpoint
+@import "breakpoint"
+
++add-breakpoint('small', 320px)
++add-breakpoint('medium', 640px)
++add-breakpoint('large', 920px)
++add-breakpoint('wide', 1200px)
++add-breakpoint('mega', 1400px)
+
+// Default container
+%container
+  +container(100%)
+  margin: 0 rhythm(1)
+
+  +respond-to('large')
+    +container(750px)
+
+  +respond-to('wide')
+    +container(1170px)
