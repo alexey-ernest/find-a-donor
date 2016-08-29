@@ -1,0 +1,34 @@
+{
+  "name": "find-a-donor",
+  "version": "0.0.1",
+  "description": "A service for finding blood donors near you",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexey-ernest/find-a-donor.git"
+  },
+  "keywords": [
+    "blood",
+    "donor",
+    "location",
+    "find",
+    "near"
+  ],
+  "author": "Alexey Melnikov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexey-ernest/find-a-donor/issues"
+  },
+  "homepage": "https://github.com/alexey-ernest/find-a-donor#readme",
+  "devDependencies": {
+    "body-parser": "^1.15.2",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "mongoose": "^4.5.10",
+    "morgan": "^1.7.0"
+  }
+}
