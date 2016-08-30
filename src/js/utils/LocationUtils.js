@@ -1,20 +1,19 @@
 
 import LocationActionCreators from '../actions/LocationActionCreators';
-import MapUtils from './MapUtils';
 
 export default {
 
   getCurrentLocation() {
-    var map = MapUtils.get();
 
-    map.on('locationfound', (e) => {
-      LocationActionCreators.receive(e.latlng);
-    });
-    map.on('locationerror', (e) => {
-      LocationActionCreators.receiveError(e);
-    });
-
-    map.locate();
+    if ('geolocation' in navigator) {
+      /* geolocation is available */
+      navigator.geolocation.getCurrentPosition(function(position) {
+        LocationActionCreators.receive([position.coords.latitude, position.coords.longitude]);
+      });
+    } else {
+      /* geolocation IS NOT available */
+      LocationActionCreators.receiveError(new Error('GeoLocation is not available.'));
+    }
   }
 
 };

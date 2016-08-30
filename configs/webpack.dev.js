@@ -11,7 +11,7 @@ var config = {
   entry: [
     'webpack/hot/dev-server',
     'webpack/hot/only-dev-server',
-    path.join(__dirname, '../src/js/app.js'),
+    path.join(__dirname, '../src/js/app.js')
   ],
   // Server Configuration options
   devServer: {
@@ -50,11 +50,15 @@ var config = {
         // React-hot loader and
         test: /\.jsx?$/,
         loaders: ['react-hot', 'babel-loader'], // react-hot is like browser sync and babel loads jsx and es6-7
-        exclude: [nodeModulesPath],
+        exclude: [nodeModulesPath]
       },
       {
         test: /\.(sass|scss)$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!sass-loader?sourceMap')
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&modules!sass-loader?sourceMap')
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap')
       },
       {
         test: /\.(png|gif|jpg)$/,

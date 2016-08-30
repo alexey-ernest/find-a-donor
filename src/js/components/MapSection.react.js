@@ -6,9 +6,13 @@
 import * as styles from '../../sass/modules/map-section.sass';
 
 import React, {Component, PropTypes} from 'react';
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 
+import DonorRegistrationForm from './DonorRegistrationForm.react';
 import DonorConstants from '../constants/DonorConstants';
-import MapUtils from '../utils/MapUtils';
+
+
+var DEFAULT_LOCATION = DonorConstants.HomeLocation.lnglat;
 
 export default class MapSection extends Component {
 
@@ -16,38 +20,19 @@ export default class MapSection extends Component {
     data: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    var homeLocation = DonorConstants.HomeLocation;
-
-    // create map
-    var map = L.map('map').setView(homeLocation.lnglat, homeLocation.zoom);
-
-    // load ESRI basemap
-    L.esri.basemapLayer(homeLocation.basemap).addTo(map);
-
-    // cache map
-    MapUtils.set(map);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    var homeLocation = DonorConstants.HomeLocation;
-
-    // setting current location
-    var map = MapUtils.get();
-    if (map) {
-      map.setView(nextProps.data.location, homeLocation.zoom);
-
-      // add marker
-      L.marker(nextProps.data.location).addTo(map)
-        .bindPopup('You are here')
-        .openPopup();
-    }
-  }
-
   render() {
+    var location = this.props.data.location || DEFAULT_LOCATION;
     return (
-      <section id="map">
-      </section>
+      <Map center={location} zoom={DonorConstants.HomeLocation.zoom}>
+        <TileLayer
+          url='http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+        />
+        <Marker position={location}>
+          <Popup>
+            <DonorRegistrationForm donor={{}} />
+          </Popup>
+        </Marker>
+      </Map>
     );
   }
 

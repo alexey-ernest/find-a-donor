@@ -13,7 +13,7 @@ var config = {
   // output config
   output: {
     path: buildPath, // Path of output file
-    filename: 'js/bundle.js', // Name of output file
+    filename: 'js/bundle.js' // Name of output file
   },
   plugins: [
     // Define production build to allow React to strip out unnecessary checks
@@ -56,7 +56,11 @@ var config = {
       },
       {
         test: /\.(sass|scss)$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!sass-loader?sourceMap')
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap&modules!sass-loader?sourceMap')
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap')
       },
       {
         test: /\.(png|gif|jpg)$/,
