@@ -1,2 +1,15 @@
+@import "../typography"
+@import "../layout"
+
 .donor-registration-form
   width: 300px
+
+  h1
+    +type-setting(1)
+
+  .row
+    +container(100%)
+  .col1
+    +span(1 of 2)
+  .col2
+    +span(1 of 2 last)

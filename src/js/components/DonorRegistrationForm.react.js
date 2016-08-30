@@ -12,21 +12,24 @@ import React, {Component, PropTypes} from 'react';
 import Input from 'react-toolbox/lib/input';
 import Button from 'react-toolbox/lib/button';
 
+import Validation from '../../../lib/utils/validation';
+
+const ValidationPatters = Validation.Patterns;
+const ENTER_KEY_CODE = 13;
+
 
 const validate = (values) => {
-  const errors = {};
-
   if (!values.firstName || values.firstName.trim() === '') {
     return false
   }
   if (!values.lastName || values.lastName.trim() === '') {
     return false
   }
-  if (!values.contactNumber || values.contactNumber.trim() === '') {
+  if (!values.contactNumber || values.contactNumber.trim() === '' || !ValidationPatters.phone.test(values.contactNumber)) {
     // todo: validate phone
     return false
   }
-  if (!values.emailAddress || values.emailAddress.trim() === '' || !emailRegex.test(values.emailAddress.trim())) {
+  if (!values.emailAddress || values.emailAddress.trim() === '' || !ValidationPatters.email.test(values.emailAddress)) {
     return false
   }
   if (!values.bloodGroup || values.bloodGroup.trim() === '') {
@@ -57,24 +60,29 @@ export default class DonorRegistrationForm extends Component {
       <form
         className={styles['donor-registration-form']}
         onSubmit={this._onSubmit}>
-        <Input
-          type="text"
-          label="First Name"
-          name="firstName"
-          value={this.state.firstName}
-          onChange={this._onChange.bind(this, 'firstName')}
-          onKeyDown={this._onKeyDown}
-          disabled={isDonor}
-          maxLength={30} />
-        <Input
-          type="text"
-          label="Last Name"
-          name="lastName"
-          value={this.state.lastName}
-          onChange={this._onChange.bind(this, 'lastName')}
-          onKeyDown={this._onKeyDown}
-          disabled={isDonor}
-          maxLength={30} />
+        <h1>Pin your location on the Donor's map</h1>
+        <div className={styles.row}>
+          <Input
+            className={styles.col1}
+            type="text"
+            label="First Name"
+            name="firstName"
+            value={this.state.firstName}
+            onChange={this._onChange.bind(this, 'firstName')}
+            onKeyDown={this._onKeyDown}
+            disabled={isDonor}
+            maxLength={30} />
+          <Input
+            className={styles.col2}
+            type="text"
+            label="Last Name"
+            name="lastName"
+            value={this.state.lastName}
+            onChange={this._onChange.bind(this, 'lastName')}
+            onKeyDown={this._onKeyDown}
+            disabled={isDonor}
+            maxLength={30} />
+        </div>
         <Input
           type="text"
           label="Contact Number"
@@ -100,7 +108,8 @@ export default class DonorRegistrationForm extends Component {
           onKeyDown={this._onKeyDown}
           disabled={isDonor} />
         <Button
-          label="Submit"
+          label="Pin"
+          icon="add_location"
           raised primary
           disabled={isDonor || !isFormValid}
           onClick={this._onSubmit} />

@@ -6,13 +6,15 @@
 import * as styles from '../../sass/modules/map-section.sass';
 
 import React, {Component, PropTypes} from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Map, Marker, Popup, CircleMarker, TileLayer } from 'react-leaflet';
+import MarkerLayer from 'react-leaflet-marker-layer';
 
+import DonorRegistrationMarker from './DonorRegistrationMarker.react';
 import DonorRegistrationForm from './DonorRegistrationForm.react';
 import DonorConstants from '../constants/DonorConstants';
 
 
-var DEFAULT_LOCATION = DonorConstants.HomeLocation.lnglat;
+const DEFAULT_LOCATION = DonorConstants.HomeLocation.lnglat;
 
 export default class MapSection extends Component {
 
@@ -20,20 +22,65 @@ export default class MapSection extends Component {
     data: PropTypes.object.isRequired
   };
 
+  state = {
+    showPopup: false
+  };
+
   render() {
     var location = this.props.data.location || DEFAULT_LOCATION;
+    var markers = [{
+      position: { lng: location[1], lat: location[0] }
+    }];
+
+    var popup;
+    if (this.state.showPopup) {
+      popup = <Popup
+                position={location}
+                closeButton={false}
+              >
+                <DonorRegistrationForm donor={{}} />
+              </Popup>;
+    }
+
+    var marker;
+    if (this.props.data.location) {
+      marker = <MarkerLayer
+                  markers={markers}
+                  longitudeExtractor={m => m.position.lng}
+                  latitudeExtractor={m => m.position.lat}
+                  markerComponent={DonorRegistrationMarker}
+                  propsForMarkers={{
+                    onClick: this._onClick
+                  }}
+                />;
+    }
+
     return (
-      <Map center={location} zoom={DonorConstants.HomeLocation.zoom}>
+      <Map
+        onClick={this._onMapClick}
+        center={location}
+        doubleClickZoom={false}
+        zoom={DonorConstants.HomeLocation.zoom}
+      >
         <TileLayer
-          url='http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+          url='http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'
         />
-        <Marker position={location}>
-          <Popup>
-            <DonorRegistrationForm donor={{}} />
-          </Popup>
-        </Marker>
+        <TileLayer
+          url='http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}'
+        />
+        {marker}
+        {popup}
       </Map>
     );
   }
+
+  _onMapClick = (event) => {
+    this.setState({...this.state, ['showPopup']: false});
+  };
+
+  _onClick = (marker) => {
+    console.log('Marker click');
+    this.setState({...this.state, ['showPopup']: true});
+  };
 
 }
