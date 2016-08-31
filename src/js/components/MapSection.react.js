@@ -3,7 +3,7 @@
  */
 
 // CSS
-import * as styles from '../../sass/modules/map-section.sass';
+import styles from '../../sass/modules/map-section.sass';
 
 import React, {Component, PropTypes} from 'react';
 import { Map, Marker, Popup, CircleMarker, TileLayer } from 'react-leaflet';
@@ -28,6 +28,7 @@ export default class MapSection extends Component {
 
   render() {
     var location = this.props.data.location || DEFAULT_LOCATION;
+
     var markers = [{
       position: { lng: location[1], lat: location[0] }
     }];
@@ -60,6 +61,7 @@ export default class MapSection extends Component {
         onClick={this._onMapClick}
         center={location}
         doubleClickZoom={false}
+        animate={true}
         zoom={DonorConstants.HomeLocation.zoom}
       >
         <TileLayer

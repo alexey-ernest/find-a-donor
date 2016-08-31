@@ -2,7 +2,13 @@
  * Donor App main component.
  */
 
+// CSS
+import styles from '../../sass/modules/donor-app.sass';
+
+// React
 import React, {Component, PropTypes} from 'react';
+
+import MyLocation from './MyLocation.react';
 
 import {
   LocationStore
@@ -30,8 +36,11 @@ export default class DonorApp extends Component {
 
   render() {
     return (
-      <div className="donor-app">
+      <div className={styles['donor-app']}>
         <MapSection data={this.state} />
+        <div className={styles['my-location-button']}>
+          <MyLocation data={this.state} />
+        </div>
       </div>
     );
   }
