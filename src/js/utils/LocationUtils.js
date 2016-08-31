@@ -1,3 +1,6 @@
+/**
+ * Utilities for working with GEO API.
+ */
 
 import LocationActionCreators from '../actions/LocationActionCreators';
 

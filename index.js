@@ -2,11 +2,15 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var errors = require('./lib/routes/errors');
 var routes = require('./lib/routes');
 
 var app = express();
+
+// CORS
+app.use(cors({ allowedHeaders: 'Authorization, Content-Type' }));
 
 // logger
 if (app.get('env') === 'development') {

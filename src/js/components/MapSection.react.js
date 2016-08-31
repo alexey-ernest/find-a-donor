@@ -5,9 +5,15 @@
 // CSS
 import styles from '../../sass/modules/map-section.sass';
 
+// React
 import React, {Component, PropTypes} from 'react';
+
+// Leaflet
 import { Map, Marker, Popup, CircleMarker, TileLayer } from 'react-leaflet';
 import MarkerLayer from 'react-leaflet-marker-layer';
+
+// Toolbox
+import { Snackbar } from 'react-toolbox';
 
 import DonorRegistrationMarker from './DonorRegistrationMarker.react';
 import DonorRegistrationForm from './DonorRegistrationForm.react';
@@ -23,7 +29,9 @@ export default class MapSection extends Component {
   };
 
   state = {
-    showPopup: false
+    new_donor: null,
+    showPopup: false,
+    showSnackbar: false
   };
 
   render() {
@@ -33,16 +41,18 @@ export default class MapSection extends Component {
       position: { lng: location[1], lat: location[0] }
     }];
 
+    // popup
     var popup;
-    if (this.state.showPopup) {
+    if (!this.props.data.new_donor && this.state.showPopup) {
       popup = <Popup
                 position={location}
                 closeButton={false}
               >
-                <DonorRegistrationForm donor={{}} />
+                <DonorRegistrationForm data={this.props.data} />
               </Popup>;
     }
 
+    // marker
     var marker;
     if (this.props.data.location) {
       marker = <MarkerLayer
@@ -51,9 +61,28 @@ export default class MapSection extends Component {
                   latitudeExtractor={m => m.position.lat}
                   markerComponent={DonorRegistrationMarker}
                   propsForMarkers={{
-                    onClick: this._onClick
+                    onClick: this._onMarkerClick
                   }}
                 />;
+    }
+
+    // snackbar
+    var snackbar;
+    if (!this.state.new_donor && this.props.data.new_donor) {
+      // show snackbar if the donor has just registered
+      this.state.showSnackbar = true;
+      this.state.new_donor = this.props.data.new_donor;
+
+      snackbar = <Snackbar
+                    action='OK'
+                    active={this.state.showSnackbar}
+                    icon='place'
+                    label='You&#39;ve just registered as a donor. Thanks.'
+                    timeout={5000}
+                    onClick={this._onSnackbarClick}
+                    onTimeout={this._onSnackbarClick}
+                    type='accept'
+                  />;
     }
 
     return (
@@ -72,17 +101,21 @@ export default class MapSection extends Component {
         />
         {marker}
         {popup}
+        {snackbar}
       </Map>
     );
   }
 
   _onMapClick = (event) => {
-    this.setState({...this.state, ['showPopup']: false});
+    this.setState({...this.state, 'showPopup': false});
   };
 
-  _onClick = (marker) => {
-    console.log('Marker click');
-    this.setState({...this.state, ['showPopup']: true});
+  _onMarkerClick = (marker) => {
+    this.setState({...this.state, 'showPopup': true});
+  };
+
+  _onSnackbarClick = () => {
+    this.setState({...this.state, 'showSnackbar': false});
   };
 
 }

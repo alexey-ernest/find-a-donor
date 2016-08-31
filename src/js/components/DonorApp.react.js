@@ -11,14 +11,16 @@ import React, {Component, PropTypes} from 'react';
 import MyLocation from './MyLocation.react';
 
 import {
-  LocationStore
+  LocationStore,
+  DonorStore,
 } from '../stores';
 
 import MapSection from './MapSection.react';
 
 const getStateFromStores = () => {
   return {
-    location: LocationStore.get()
+    location: LocationStore.get(),
+    new_donor: DonorStore.get()
   };
 };
 
@@ -28,10 +30,12 @@ export default class DonorApp extends Component {
 
   componentDidMount() {
     LocationStore.addChangeListener(this._onChange);
+    DonorStore.addChangeListener(this._onChange);
   }
 
   componentWillUnmount() {
-    LocationStore.addChangeListener(this._onChange);
+    LocationStore.removeChangeListener(this._onChange);
+    DonorStore.removeChangeListener(this._onChange);
   }
 
   render() {

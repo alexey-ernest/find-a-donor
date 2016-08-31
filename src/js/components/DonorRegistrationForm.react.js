@@ -12,6 +12,7 @@ import React, {Component, PropTypes} from 'react';
 import Input from 'react-toolbox/lib/input';
 import Button from 'react-toolbox/lib/button';
 
+import DonorActionCreators from '../actions/DonorActionCreators';
 import Validation from '../../../lib/utils/validation';
 
 const ValidationPatters = Validation.Patterns;
@@ -42,10 +43,11 @@ const validate = (values) => {
 export default class DonorRegistrationForm extends Component {
 
   static propTypes = {
-    donor: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
   };
 
   state = {
+    isSubmitted: false,
     firstName: '',
     lastName: '',
     contactNumber: '',
@@ -55,7 +57,7 @@ export default class DonorRegistrationForm extends Component {
 
   render() {
     var isFormValid = validate(this.state);
-    var isDonor = !!this.props.donor && this.props.donor.id;
+    var isSubmitted = this.state.isSubmitted;
     return (
       <form
         className={styles['donor-registration-form']}
@@ -70,7 +72,7 @@ export default class DonorRegistrationForm extends Component {
             value={this.state.firstName}
             onChange={this._onChange.bind(this, 'firstName')}
             onKeyDown={this._onKeyDown}
-            disabled={isDonor}
+            disabled={isSubmitted}
             maxLength={30} />
           <Input
             className={styles.col2}
@@ -80,7 +82,7 @@ export default class DonorRegistrationForm extends Component {
             value={this.state.lastName}
             onChange={this._onChange.bind(this, 'lastName')}
             onKeyDown={this._onKeyDown}
-            disabled={isDonor}
+            disabled={isSubmitted}
             maxLength={30} />
         </div>
         <Input
@@ -90,7 +92,7 @@ export default class DonorRegistrationForm extends Component {
           value={this.state.contactNumber}
           onChange={this._onChange.bind(this, 'contactNumber')}
           onKeyDown={this._onKeyDown}
-          disabled={isDonor} />
+          disabled={isSubmitted} />
         <Input
           type="text"
           label="Email Address"
@@ -98,7 +100,7 @@ export default class DonorRegistrationForm extends Component {
           value={this.state.emailAddress}
           onChange={this._onChange.bind(this, 'emailAddress')}
           onKeyDown={this._onKeyDown}
-          disabled={isDonor} />
+          disabled={isSubmitted} />
         <Input
           type="text"
           label="Blood Group"
@@ -106,13 +108,14 @@ export default class DonorRegistrationForm extends Component {
           value={this.state.bloodGroup}
           onChange={this._onChange.bind(this, 'bloodGroup')}
           onKeyDown={this._onKeyDown}
-          disabled={isDonor} />
+          disabled={isSubmitted} />
         <Button
           label="Pin"
           icon="add_location"
           raised primary
-          disabled={isDonor || !isFormValid}
-          onClick={this._onSubmit} />
+          disabled={isSubmitted || !isFormValid}
+          onClick={this._onSubmit}
+        />
       </form>
     );
   }
@@ -128,7 +131,14 @@ export default class DonorRegistrationForm extends Component {
   };
 
   _onSubmit = (event) => {
-    //DonorActionCreators.submit(this.state);
     event.preventDefault();
+
+    this.setState({...this.state, isSubmitted: true});
+
+    var donorData = Object.assign({}, this.state, {
+      loc: this.props.data.location
+    });
+
+    DonorActionCreators.submitDonorData(donorData);
   };
 }
