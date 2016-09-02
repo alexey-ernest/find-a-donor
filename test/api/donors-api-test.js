@@ -340,7 +340,7 @@ describe('/api/donors', function () {
 
   });
 
-  describe('GET /find/:longitude/:latitude/:distance', function () {
+  describe('GET /find/:bllng,:bllat/:urlng,:urlat', function () {
 
     var donors = [];
 
@@ -366,8 +366,7 @@ describe('/api/donors', function () {
       });
     });
 
-    it('should find all 3 donors in a specified radius', function (done) {
-      this.timeout(10 * 1000);
+    it('should find all 3 donors in a specified rectangle', function (done) {
 
       // creating donors
       function createDonorTask(data) {
@@ -394,9 +393,14 @@ describe('/api/donors', function () {
         if (err) return done(err);
         donors = donorsData;
 
-        // searching for donors 30km near the center of the Moscow
+        // searching for donors near the center of the Moscow
+        var loc = [37.6155600, 55.7522200],
+            dist = 0.5,
+            bl = [loc[0] - dist, loc[1] - dist],
+            ur = [loc[0] + dist, loc[1] + dist];
+
         request(app)
-          .get('/api/donors/find/37.6155600/55.7522200/30000')
+          .get('/api/donors/find/' + bl[0] + ',' + bl[1] + '/' + ur[0] + ',' + ur[1])
           .expect(200, function (err, res) {
             if (err) return done(err);
 

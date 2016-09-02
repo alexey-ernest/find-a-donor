@@ -9,8 +9,7 @@ import styles from '../../sass/modules/donor-registration-form.sass';
 import React, {Component, PropTypes} from 'react';
 
 // Toolbox
-import Input from 'react-toolbox/lib/input';
-import Button from 'react-toolbox/lib/button';
+import {Input, Button, Autocomplete} from 'react-toolbox';
 
 import DonorActionCreators from '../actions/DonorActionCreators';
 import Validation from '../../../lib/utils/validation';
@@ -40,6 +39,8 @@ export default class DonorRegistrationForm extends Component {
     var errors = Validation.validateDonor(this.state);
     var isFormValid = Object.keys(errors).length === 0;
     var isSubmitted = this.state.isSubmitted;
+    var groups = Object.keys(Validation.BLOOD_GROUPS);
+
     return (
       <form
         className={styles['donor-registration-form']}
@@ -56,7 +57,8 @@ export default class DonorRegistrationForm extends Component {
             onChange={this._onChange.bind(this, 'firstName')}
             onKeyDown={this._onKeyDown}
             disabled={isSubmitted}
-            maxLength={30} />
+            maxLength={30}
+          />
           <Input
             className={styles.col2}
             type="text"
@@ -66,7 +68,8 @@ export default class DonorRegistrationForm extends Component {
             onChange={this._onChange.bind(this, 'lastName')}
             onKeyDown={this._onKeyDown}
             disabled={isSubmitted}
-            maxLength={30} />
+            maxLength={30}
+          />
         </div>
         <Input
           type="text"
@@ -75,7 +78,8 @@ export default class DonorRegistrationForm extends Component {
           value={this.state.contactNumber}
           onChange={this._onChange.bind(this, 'contactNumber')}
           onKeyDown={this._onKeyDown}
-          disabled={isSubmitted} />
+          disabled={isSubmitted}
+        />
         <Input
           type="text"
           label="Email Address"
@@ -83,15 +87,16 @@ export default class DonorRegistrationForm extends Component {
           value={this.state.emailAddress}
           onChange={this._onChange.bind(this, 'emailAddress')}
           onKeyDown={this._onKeyDown}
-          disabled={isSubmitted} />
+          disabled={isSubmitted}
+        />
         <Input
           type="text"
-          label="Blood Group"
+          label="Blood Group (e.g., 0- or A+)"
           name="bloodGroup"
           value={this.state.bloodGroup}
           onChange={this._onChange.bind(this, 'bloodGroup')}
-          onKeyDown={this._onKeyDown}
-          disabled={isSubmitted} />
+          disabled={isSubmitted}
+        />
         <Button
           label="Pin"
           icon="add_location"
