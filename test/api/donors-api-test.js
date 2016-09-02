@@ -340,6 +340,78 @@ describe('/api/donors', function () {
 
   });
 
+  describe('PUT /{id}', function () {
+    var id;
+
+    afterEach(function(done) {
+      // delete each created donor
+      if (!id) {
+        return done();
+      }
+      deleteDonor(id, function (err) {
+        if (err) return done(err);
+        id = null;
+        done();
+      });
+    });
+
+    it('should update donor data', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          var donor = res.body;
+          id = donor._id;
+
+          donorData.firstName += id;
+
+          request(app)
+            .put('/api/donors/' + donor._id)
+            .send(donorData)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+
+              request(app)
+                .get('/api/donors/' + donor._id)
+                .expect(200)
+                .end(function (err, res) {
+                  if (err) return done(err);
+
+                  res.body.firstName.should.equal(donorData.firstName);
+                  done();
+                });
+            });
+        });
+    });
+
+    it('should not allow update with invalid data', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          var donor = res.body;
+          id = donor._id;
+
+          donorData.bloodGroup += '_';
+
+          request(app)
+            .put('/api/donors/' + donor._id)
+            .send(donorData)
+            .expect(400, done);
+        });
+    });
+
+  });
+
   describe('GET /find/:bllng,:bllat/:urlng,:urlat', function () {
 
     var donors = [];
