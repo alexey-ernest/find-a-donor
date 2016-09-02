@@ -20,7 +20,6 @@ export default class DonorRegistrationMarker extends Component {
   render() {
     return (
       <FontIcon
-        key={this.props.marker._id}
         className={styles['donor-marker']}
         onClick={this._onClick}
         value="person_pin_circle"

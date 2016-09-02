@@ -18,7 +18,7 @@ const DonorConstants = {
   }),
 
   HomeLocation: {
-    lnglat: [55.7522200, 37.6155600], // Mosocw
+    lnglat: [37.6155600, 55.7522200], // Moscow
     zoom: 13,
     basemap: 'Streets'
   }

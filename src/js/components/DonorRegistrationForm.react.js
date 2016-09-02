@@ -19,7 +19,8 @@ const ENTER_KEY_CODE = 13;
 export default class DonorRegistrationForm extends Component {
 
   static propTypes = {
-    data: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired,
+    location: PropTypes.array.isRequired
   };
 
   state = {
@@ -124,7 +125,7 @@ export default class DonorRegistrationForm extends Component {
     this.setState({...this.state, isSubmitted: true});
 
     var donorData = Object.assign({}, this.state, {
-      loc: [this.props.data.location[1], this.props.data.location[0]]
+      loc: [this.props.location[0], this.props.location[1]] // lnglat
     });
 
     DonorActionCreators.submitDonorData(donorData);

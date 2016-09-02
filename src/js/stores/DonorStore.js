@@ -17,7 +17,7 @@ var CHANGE_EVENT = 'change';
  * @type       {Object}
  */
 var _data = {
-  new_donor: null,
+  newDonor: null,
   donors: []
 };
 
@@ -63,7 +63,7 @@ DonorStore.dispatchToken = AppDispatcher.register(function(action) {
       break;
 
     case ActionTypes.RECEIVE_NEW_DONOR_DATA:
-      _data.new_donor = action.donor;
+      _data.newDonor = action.donor;
       this.emitChange();
       break;
 

@@ -20,7 +20,7 @@ import MapSection from './MapSection.react';
 const getStateFromStores = () => {
   return {
     location: LocationStore.get(),
-    new_donor: DonorStore.get().new_donor,
+    newDonor: DonorStore.get().newDonor,
     donors: DonorStore.get().donors
   };
 };
