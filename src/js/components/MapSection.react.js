@@ -141,27 +141,18 @@ export default class MapSection extends Component {
     );
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.data.location) {
-  //     return;
-  //   }
-
-  //   if (this.refs.newDonorMarker) {
-  //     this.refs.newDonorMarker.leafletElement.openPopup();
-  //   }
-  // }
-
-  renderSnackbar(btn, msg, icon) {
+  renderRegistrationSnackbar() {
     if (!this.props.data.newDonor) {
       return null;
     }
 
+    var msg = 'You\'ve just registered as a donor. Thanks.';
     return (
       <Snackbar
         key="snackbar"
-        action={btn}
+        action='OK'
         active={this.state.showSnackbar}
-        icon={icon}
+        icon="place"
         label={msg}
         timeout={5000}
         onClick={this._onSnackbarClick}
@@ -182,7 +173,7 @@ export default class MapSection extends Component {
     var donorRegistration = this.renderDonorRegistration(this.state.selectedLocation || this.props.data.location);
 
     // snackbar
-    var snackbar = this.renderSnackbar('OK', 'You\'ve just registered as a donor. Thanks.', 'place');
+    var snackbar = this.renderRegistrationSnackbar();
 
     return (
       <div>
