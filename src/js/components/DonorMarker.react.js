@@ -1,19 +1,15 @@
 /**
- * Donor registration marker component.
+ * Donor marker component.
  */
 
+// CSS
+import styles from '../../sass/modules/donor-marker.sass';
 
 // React
 import React, {Component, PropTypes} from 'react';
 
 // Toolbox
-import Button from 'react-toolbox/lib/button';
-
-const style = {
-  marginTop: '-28px',
-  marginLeft: '-28px'
-};
-
+import {FontIcon} from 'react-toolbox';
 
 export default class DonorRegistrationMarker extends Component {
 
@@ -23,12 +19,12 @@ export default class DonorRegistrationMarker extends Component {
 
   render() {
     return (
-      <Button
+      <FontIcon
+        key={this.props.marker._id}
+        className={styles['donor-marker']}
         onClick={this._onClick}
-        style={style}
-        icon="add_location"
-        primary
-        floating />
+        value="person_pin_circle"
+      />
     );
   }
 

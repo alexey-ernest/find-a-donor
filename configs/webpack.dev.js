@@ -67,6 +67,7 @@ var config = {
     ],
   },
   sassLoader: {
+    data: '@import "' + path.resolve(__dirname, '../src/sass/theme/_theme.scss') + '";',
     includePaths: [
       path.resolve(__dirname, '../src/sass'),
       path.resolve(nodeModulesPath, './compass-mixins/lib'),

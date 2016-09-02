@@ -35,6 +35,7 @@ export default class DonorApp extends Component {
       <Button
         icon="my_location"
         floating mini
+        primary
         onClick={this._onClick}
         disabled={this.state.isLookingForLocation}
       />

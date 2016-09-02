@@ -16,7 +16,10 @@ var CHANGE_EVENT = 'change';
  *
  * @type       {Object}
  */
-var _data = null;
+var _data = {
+  new_donor: null,
+  donors: []
+};
 
 class DonorStore extends EventEmitter {
 
@@ -60,7 +63,12 @@ DonorStore.dispatchToken = AppDispatcher.register(function(action) {
       break;
 
     case ActionTypes.RECEIVE_NEW_DONOR_DATA:
-      _data = action.donor;
+      _data.new_donor = action.donor;
+      this.emitChange();
+      break;
+
+    case ActionTypes.RECEIVE_VISIBLE_DONORS:
+      _data.donors = action.donors;
       this.emitChange();
       break;
 

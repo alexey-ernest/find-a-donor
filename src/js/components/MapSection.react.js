@@ -15,8 +15,12 @@ import MarkerLayer from 'react-leaflet-marker-layer';
 // Toolbox
 import { Snackbar } from 'react-toolbox';
 
+import DonorMarker from './DonorMarker.react';
 import DonorRegistrationMarker from './DonorRegistrationMarker.react';
 import DonorRegistrationForm from './DonorRegistrationForm.react';
+import DonorInfo from './DonorInfo.react';
+
+import DonorAPIUtils from '../utils/DonorAPIUtils';
 import DonorConstants from '../constants/DonorConstants';
 
 
@@ -31,39 +35,100 @@ export default class MapSection extends Component {
   state = {
     new_donor: null,
     showPopup: false,
-    showSnackbar: false
+    showSnackbar: false,
+    currentDonor: null
   };
+
+  renderDonors(donors) {
+    return (
+      <MarkerLayer
+        markers={donors}
+        longitudeExtractor={d => d.loc[0]}
+        latitudeExtractor={d => d.loc[1]}
+        markerComponent={DonorMarker}
+        propsForMarkers={{
+          onClick: this._onDonorMarkerClick
+        }}
+      />
+    );
+  }
+
+  renderDonorPopup(donor) {
+    var loc = [donor.loc[1], donor.loc[0]];
+    return (
+      <Popup
+        key={donor._id}
+        position={loc}
+      >
+        <DonorInfo donor={donor} />
+      </Popup>
+    );
+  }
+
+  renderMyPopup(location) {
+    return (
+      <Popup
+        key={location[0] + ',' + location[1]}
+        position={location}
+      >
+        <DonorRegistrationForm data={this.props.data} />
+      </Popup>
+    );
+  }
+
+  renderMyMarker(location) {
+    return (
+      <MarkerLayer
+        markers={[location]}
+        longitudeExtractor={m => m[1]}
+        latitudeExtractor={m => m[0]}
+        markerComponent={DonorRegistrationMarker}
+        propsForMarkers={{
+          onClick: this._onMarkerClick
+        }}
+      />
+    );
+  }
+
+  renderSnackbar(btn, msg, icon) {
+    return (
+      <Snackbar
+        action={btn}
+        active={this.state.showSnackbar}
+        icon={icon}
+        label={msg}
+        timeout={5000}
+        onClick={this._onSnackbarClick}
+        onTimeout={this._onSnackbarClick}
+        type='accept'
+      />
+    );
+  }
 
   render() {
     var location = this.props.data.location || DEFAULT_LOCATION;
 
-    var markers = [{
-      position: { lng: location[1], lat: location[0] }
-    }];
-
-    // popup
-    var popup;
-    if (!this.props.data.new_donor && this.state.showPopup) {
-      popup = <Popup
-                position={location}
-                closeButton={false}
-              >
-                <DonorRegistrationForm data={this.props.data} />
-              </Popup>;
+    // donors
+    var donors;
+    if (this.props.data.donors) {
+      donors = this.renderDonors(this.props.data.donors);
     }
 
-    // marker
-    var marker;
+    var donorPopup;
+    if (this.state.currentDonor) {
+      donorPopup = this.renderDonorPopup(this.state.currentDonor);
+    }
+
+    // my popup
+    var myPopup;
+    if (!this.props.data.new_donor && this.state.showPopup) {
+      myPopup = this.renderMyPopup(location);
+    }
+
+    // my marker
+    var myMarker;
     if (this.props.data.location) {
-      marker = <MarkerLayer
-                  markers={markers}
-                  longitudeExtractor={m => m.position.lng}
-                  latitudeExtractor={m => m.position.lat}
-                  markerComponent={DonorRegistrationMarker}
-                  propsForMarkers={{
-                    onClick: this._onMarkerClick
-                  }}
-                />;
+      myMarker = this.renderMyMarker(this.props.data.location);
     }
 
     // snackbar
@@ -73,21 +138,14 @@ export default class MapSection extends Component {
       this.state.showSnackbar = true;
       this.state.new_donor = this.props.data.new_donor;
 
-      snackbar = <Snackbar
-                    action='OK'
-                    active={this.state.showSnackbar}
-                    icon='place'
-                    label='You&#39;ve just registered as a donor. Thanks.'
-                    timeout={5000}
-                    onClick={this._onSnackbarClick}
-                    onTimeout={this._onSnackbarClick}
-                    type='accept'
-                  />;
+      snackbar = this.renderSnackbar('OK', 'You&#39;ve just registered as a donor. Thanks.', 'place');
     }
 
     return (
       <Map
+        ref="map"
         onClick={this._onMapClick}
+        onMoveEnd={this._onMapMoveEnd}
         center={location}
         doubleClickZoom={false}
         animate={true}
@@ -99,15 +157,36 @@ export default class MapSection extends Component {
         <TileLayer
           url='http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}'
         />
-        {marker}
-        {popup}
+        {donors}
+        {myMarker}
         {snackbar}
+        {myPopup}
+        {donorPopup}
       </Map>
     );
   }
 
+  _onMapMoveEnd = (event) => {
+    var map = this.refs.map;
+
+    // getting map bounds
+    var mapBounds = map.leafletElement.getBounds(),
+        sw = mapBounds.getSouthWest(),
+        ne = mapBounds.getNorthEast();
+
+    // requesting visible donors data
+    var bl = [sw.lng, sw.lat],
+        ur = [ne.lng, ne.lat];
+    DonorAPIUtils.findDonors(bl, ur);
+  };
+
   _onMapClick = (event) => {
     this.setState({...this.state, 'showPopup': false});
+    this.setState({...this.state, 'currentDonor': null});
+  };
+
+  _onDonorMarkerClick = (donor) => {
+    this.setState({...this.state, 'currentDonor': donor});
   };
 
   _onMarkerClick = (marker) => {

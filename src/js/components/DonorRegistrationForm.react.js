@@ -124,7 +124,7 @@ export default class DonorRegistrationForm extends Component {
     this.setState({...this.state, isSubmitted: true});
 
     var donorData = Object.assign({}, this.state, {
-      loc: this.props.data.location
+      loc: [this.props.data.location[1], this.props.data.location[0]]
     });
 
     DonorActionCreators.submitDonorData(donorData);

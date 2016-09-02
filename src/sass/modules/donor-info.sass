@@ -1,0 +1,13 @@
+@import "compass"
+@import "../typography"
+@import "../theme/theme"
+
+.donor-info
+  width: 200px
+  +type-setting(1)
+  word-wrap: break-word
+
+  a
+    +link-colors($color-primary, $color-primary)
+    +hover-link
+    font-weight: 400

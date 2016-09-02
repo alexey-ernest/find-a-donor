@@ -27,6 +27,16 @@ export default {
       type: ActionTypes.RECEIVE_NEW_DONOR_DATA,
       donor: data
     });
+  },
+
+  /**
+   * @param      {Array}  Array of currently visible donors.
+   */
+  receiveDonors(data) {
+    AppDispatcher.dispatch({
+      type: ActionTypes.RECEIVE_VISIBLE_DONORS,
+      donors: data
+    });
   }
 
 };
