@@ -15,30 +15,7 @@ import Button from 'react-toolbox/lib/button';
 import DonorActionCreators from '../actions/DonorActionCreators';
 import Validation from '../../../lib/utils/validation';
 
-const ValidationPatters = Validation.Patterns;
 const ENTER_KEY_CODE = 13;
-
-
-const validate = (values) => {
-  if (!values.firstName || values.firstName.trim() === '') {
-    return false
-  }
-  if (!values.lastName || values.lastName.trim() === '') {
-    return false
-  }
-  if (!values.contactNumber || values.contactNumber.trim() === '' || !ValidationPatters.phone.test(values.contactNumber)) {
-    // todo: validate phone
-    return false
-  }
-  if (!values.emailAddress || values.emailAddress.trim() === '' || !ValidationPatters.email.test(values.emailAddress)) {
-    return false
-  }
-  if (!values.bloodGroup || values.bloodGroup.trim() === '') {
-    return false
-  }
-
-  return true;
-}
 
 export default class DonorRegistrationForm extends Component {
 
@@ -55,8 +32,13 @@ export default class DonorRegistrationForm extends Component {
     bloodGroup: ''
   };
 
+  componentDidMount() {
+    this.refs.firstNameInput.getWrappedInstance().focus();
+  }
+
   render() {
-    var isFormValid = validate(this.state);
+    var errors = Validation.validateDonor(this.state);
+    var isFormValid = Object.keys(errors).length === 0;
     var isSubmitted = this.state.isSubmitted;
     return (
       <form
@@ -65,6 +47,7 @@ export default class DonorRegistrationForm extends Component {
         <h1>Pin your location on the Donor's map</h1>
         <div className={styles.row}>
           <Input
+            ref="firstNameInput"
             className={styles.col1}
             type="text"
             label="First Name"

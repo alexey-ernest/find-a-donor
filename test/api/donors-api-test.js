@@ -8,41 +8,33 @@ var async = require('async');
 
 var chai = require('chai');
 chai.should();
+chai.use(require('chai-things'));
 var expect = chai.expect;
 
 var SAMPLE_DONOR_DATA = [
   {
     firstName: 'Alexey',
     lastName: 'Melnikov',
-    contactNumber: 'XXX',
+    contactNumber: '+79257338444',
     emailAddress: 'aaa@aaa.com',
     bloodGroup: '0-',
-    loc: { // Moscow coordinates
-      longitude: 37.6155600,
-      latitude: 55.7522200
-    }
+    loc: [37.6155600, 55.7522200] // Moscow coordinates
   },
   {
     firstName: 'Evgenia',
     lastName: 'Melnikova',
-    contactNumber: 'XXX',
+    contactNumber: '+79257338445',
     emailAddress: 'bbb@bbb.com',
     bloodGroup: '0+',
-    loc: { // Vnukovo coordinates
-      longitude: 37.2712342,
-      latitude: 55.599648
-    }
+    loc: [37.2712342, 55.599648] // Vnukovo coordinates
   },
   {
     firstName: 'Maxim',
     lastName: 'Melnikov',
-    contactNumber: 'XXX',
+    contactNumber: '+79257338446',
     emailAddress: 'ccc@cc.com',
     bloodGroup: '0+',
-    loc: { // Seremetevo coordinates
-      longitude: 37.4125029,
-      latitude: 55.9736482
-    }
+    loc: [37.4125029, 55.9736482] // Seremetevo coordinates
   }
 ];
 
@@ -75,6 +67,199 @@ describe('/api/donors', function () {
       });
     });
 
+    it('should not create a donor without firstName', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      delete donorData['firstName'];
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('firstName');
+
+          done();
+        });
+    });
+
+    it('should not create a donor with empty firstName', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0], {
+        firstName: ' '
+      });
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('firstName');
+
+          done();
+        });
+    });
+
+    it('should not create a donor without lastName', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      delete donorData['lastName'];
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('lastName');
+
+          done();
+        });
+    });
+
+    it('should not create a donor with empty lastName', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0], {
+        lastName: ' '
+      });
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('lastName');
+
+          done();
+        });
+    });
+
+    it('should not create a donor without contactNumber', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      delete donorData['contactNumber'];
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('contactNumber');
+
+          done();
+        });
+    });
+
+    it('should not create a donor with 10-digit invalid contactNumber', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0], {
+        contactNumber: '9257338888'
+      });
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('contactNumber');
+
+          done();
+        });
+    });
+
+    it('should not create a donor without emailAddress', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      delete donorData['emailAddress'];
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('emailAddress');
+
+          done();
+        });
+    });
+
+    it('should not create a donor with invalid emailAddress', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0], {
+        emailAddress: '@aaaa.com'
+      });
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('emailAddress');
+
+          done();
+        });
+    });
+
+    it('should not create a donor without bloodGroup', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0]);
+      delete donorData['bloodGroup'];
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('bloodGroup');
+
+          done();
+        });
+    });
+
+    it('should not create a donor with invalid bloodGroup', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0], {
+        bloodGroup: 'C-'
+      });
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('bloodGroup');
+
+          done();
+        });
+    });
+
+    it('should not create a donor with a bloodGroup without Rh', function (done) {
+      var donorData = Object.assign({}, SAMPLE_DONOR_DATA[0], {
+        bloodGroup: 'A'
+      });
+
+      request(app)
+        .post('/api/donors')
+        .send(donorData)
+        .expect(400)
+        .end(function (err, res) {
+          if (err) return done(err);
+
+          res.body.should.have.property('bloodGroup');
+
+          done();
+        });
+    });
+
     it('should create a new donor with all the required fields', function (done) {
       var donorData = SAMPLE_DONOR_DATA[0];
 
@@ -84,7 +269,6 @@ describe('/api/donors', function () {
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-
           var donor = res.body;
 
           donor.should.have.property('_id');
@@ -107,8 +291,8 @@ describe('/api/donors', function () {
           donor.bloodGroup.should.equal(donorData.bloodGroup);
 
           donor.should.have.property('loc');
-          donor.loc[0].should.equal(donorData.loc.longitude);
-          donor.loc[1].should.equal(donorData.loc.latitude);
+          donor.loc[0].should.equal(donorData.loc[0]);
+          donor.loc[1].should.equal(donorData.loc[1]);
 
           done();
         });
@@ -182,7 +366,7 @@ describe('/api/donors', function () {
       });
     });
 
-    it('should find 3 donors in a specified radius', function (done) {
+    it('should find all 3 donors in a specified radius', function (done) {
       this.timeout(10 * 1000);
 
       // creating donors
@@ -217,7 +401,12 @@ describe('/api/donors', function () {
             if (err) return done(err);
 
             var searchResults = res.body;
-            searchResults.length.should.equal(3);
+            expect(searchResults.length >= 3).to.be.true;
+
+            searchResults.should.contain.a.thing.with.property('_id', donors[0]._id);
+            searchResults.should.contain.a.thing.with.property('_id', donors[1]._id);
+            searchResults.should.contain.a.thing.with.property('_id', donors[2]._id);
+
             done();
           });
       });
