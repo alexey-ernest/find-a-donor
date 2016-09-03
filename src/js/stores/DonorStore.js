@@ -4,7 +4,7 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import DonorConstants from '../constants/DonorConstants';
-import DonorAPIUtils from '../utils/DonorAPIUtils';
+import DonorSocketUtils from '../utils/DonorSocketUtils';
 
 import EventEmitter from 'events';
 
@@ -60,7 +60,7 @@ DonorStore.dispatchToken = AppDispatcher.register(function(action) {
   switch(action.type) {
 
     case ActionTypes.SUBMIT_DONOR_DATA:
-      DonorAPIUtils.registerDonor(action.donor);
+      DonorSocketUtils.registerDonor(action.donor);
       break;
 
     case ActionTypes.RECEIVE_NEW_DONOR_DATA:

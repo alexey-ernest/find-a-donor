@@ -21,7 +21,48 @@ loadscript(SOCKETS_URL, function () {
   socket = io(URL);
 });
 
+function findDonors (bl, ur) {
+  if (!socket) {
+    return;
+  }
+
+  // memoization
+  var data;
+  if (!bl || !ur) {
+    data = findDonors.data;
+  } else {
+    data = {bl: bl, ur: ur};
+    findDonors.data = data;
+  }
+
+  socket.emit('findDonors', data);
+  socket.on('donors', function (donors) {
+    DonorActionCreators.receiveDonors(donors);
+  });
+
+  // listening for donors updates
+  socket.on('donorsUpdate', function () {
+    findDonors();
+  });
+}
+
 export default {
+
+  /**
+   * Registers new donor.
+   *
+   * @param      {Object}  donorData  The donor data.
+   */
+  registerDonor: function (donorData) {
+    if (!socket) {
+      return;
+    }
+
+    socket.emit('registerDonor', donorData);
+    socket.on('newDonor', function (donor) {
+      DonorActionCreators.receiveNewDonor(donor);
+    });
+  },
 
   /**
    * Finds donors in rectangular area defined by bottom-left and upper-right corners.
@@ -37,6 +78,11 @@ export default {
     socket.emit('findDonors', {bl: bl, ur: ur});
     socket.on('donors', function (donors) {
       DonorActionCreators.receiveDonors(donors);
+    });
+
+    // listening for donors updates
+    socket.on('donorsUpdate', function () {
+
     });
   }
 
