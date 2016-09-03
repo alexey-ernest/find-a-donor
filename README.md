@@ -58,6 +58,7 @@ Using npm:
 ```
 $ npm install
 $ npm run build
+$ export MONGODB_CONNECTION=mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname>
 $ npm start
 ```
 
