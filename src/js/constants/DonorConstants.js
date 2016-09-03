@@ -12,6 +12,7 @@ const DonorConstants = {
 
     SUBMIT_DONOR_DATA: null,
     RECEIVE_NEW_DONOR_DATA: null,
+    RECEIVE_DONOR: null,
     RECEIVE_VISIBLE_DONORS: null,
 
     RECEIVE_NEW_VIEW_BOUNDS: null

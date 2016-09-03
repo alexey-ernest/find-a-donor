@@ -26,6 +26,35 @@ export default {
     });
   },
 
+/**
+  * Get donor by id.
+  *
+  * @param      {string}  id      Donor id.
+  */
+  getDonor: function (id) {
+
+    $.get(URL + '/' + id, function(data) {
+      DonorActionCreators.receiveDonor(data);
+    });
+  },
+
+  /**
+   * Update donor.
+   *
+   * @param      {Object}  donorData  The new donor data.
+   */
+  updateDonor: function (donorData) {
+
+    $.ajax({
+      type: 'PUT',
+      url: URL + '/' + donorData._id,
+      data: donorData,
+      success: function(data) {
+        DonorActionCreators.receiveDonor(data);
+      }
+    });
+  },
+
   /**
    * Finds donors in rectangular area defined by bottom-left and upper-right corners.
    *

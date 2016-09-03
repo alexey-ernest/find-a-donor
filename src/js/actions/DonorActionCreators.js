@@ -30,6 +30,16 @@ export default {
   },
 
   /**
+   * @param      {Object}  Donor.
+   */
+  receiveDonor(data) {
+    AppDispatcher.dispatch({
+      type: ActionTypes.RECEIVE_DONOR,
+      donor: data
+    });
+  },
+
+  /**
    * @param      {Array}  Array of currently visible donors.
    */
   receiveDonors(data) {

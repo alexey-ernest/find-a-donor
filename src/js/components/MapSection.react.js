@@ -8,6 +8,11 @@ import styles from '../../sass/modules/map-section.sass';
 // React
 import React, {Component, PropTypes} from 'react';
 
+// Router
+import {useRouterHistory} from 'react-router';
+import {createHashHistory} from 'history';
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false });
+
 // Leaflet
 import {divIcon} from 'leaflet';
 import {Map, Marker, Popup, CircleMarker, TileLayer, LayersControl, FeatureGroup} from 'react-leaflet';
@@ -15,11 +20,10 @@ import {Map, Marker, Popup, CircleMarker, TileLayer, LayersControl, FeatureGroup
 // Toolbox
 import {Snackbar} from 'react-toolbox';
 
-import DonorMarker from './DonorMarker.react';
-import DonorRegistrationMarker from './DonorRegistrationMarker.react';
 import DonorRegistrationForm from './DonorRegistrationForm.react';
 import DonorInfo from './DonorInfo.react';
 
+import DonorActionCreators from '../actions/DonorActionCreators';
 import DonorAPIUtils from '../utils/DonorAPIUtils';
 import DonorConstants from '../constants/DonorConstants';
 
@@ -42,6 +46,25 @@ export default class MapSection extends Component {
     showSnackbar: true,
     isPopupJustClosed: false
   };
+
+  snackbarTimeout = null;
+
+  componentWillReceiveProps(props) {
+    if (this.props.data.newDonor && props.data.newDonor &&
+        this.props.data.newDonor._id !== props.data.newDonor._id) {
+      // new donor registered
+      this.setState({...this.state,
+        showSnackbar: true
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.snackbarTimeout) {
+      clearTimeout(this.snackbarTimeout);
+      this.snackbarTimeout = null;
+    }
+  }
 
   _onMapMoveEnd = (event) => {
     var map = this.refs.map;
@@ -83,6 +106,10 @@ export default class MapSection extends Component {
   };
 
   _onSnackbarClick = () => {
+    appHistory.push('/donor/' + this.props.data.newDonor._id);
+  };
+
+  _onSnackbarTimeout = () => {
     this.setState({...this.state,
       showSnackbar: false
     });
@@ -114,6 +141,14 @@ export default class MapSection extends Component {
     );
   }
 
+  _onRegistrationSubmit = (donorData) => {
+    // setting location data
+    var location = this.state.selectedLocation || this.props.data.location;
+    donorData.loc = [location[0], location[1]] // lnglat
+
+    DonorActionCreators.submitDonorData(donorData);
+  };
+
   renderDonorRegistration(location) {
     if (!location) {
       return null;
@@ -133,7 +168,13 @@ export default class MapSection extends Component {
               closeButton={false}
               position={[location[1], location[0]]}
             >
-              <DonorRegistrationForm data={this.props.data} location={location} />
+              <DonorRegistrationForm
+                donor={this.props.data.newDonor}
+                onSubmit={this._onRegistrationSubmit}
+                title="Pin your location on the Donor's map"
+                button="Pin"
+                buttonIcon="add_location"
+              />
             </Popup>
           </Marker>
         </FeatureGroup>
@@ -146,17 +187,29 @@ export default class MapSection extends Component {
       return null;
     }
 
-    var msg = 'You\'ve just registered as a donor. Thanks.';
+    if (this.snackbarTimeout) {
+      clearTimeout(this.snackbarTimeout);
+      this.snackbarTimeout = null;
+    }
+
+    // set timeout
+    if (this.state.showSnackbar) {
+      this.snackbarTimeout = setTimeout(() => {
+        this._onSnackbarTimeout();
+        this.snackbarTimeout = null;
+      }, 20000);
+    }
+
+    var msg = 'You\'ve just registered as a donor. You can update your information by clicking the Details button.';
     return (
       <Snackbar
         key="snackbar"
-        action='OK'
+        action='Details'
         active={this.state.showSnackbar}
         icon="place"
         label={msg}
-        timeout={5000}
+        timeout={20000}
         onClick={this._onSnackbarClick}
-        onTimeout={this._onSnackbarClick}
         type='accept'
       />
     );

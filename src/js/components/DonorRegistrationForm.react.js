@@ -11,7 +11,6 @@ import React, {Component, PropTypes} from 'react';
 // Toolbox
 import {Input, Button, Autocomplete} from 'react-toolbox';
 
-import DonorActionCreators from '../actions/DonorActionCreators';
 import Validation from '../../../lib/utils/validation';
 
 const ENTER_KEY_CODE = 13;
@@ -19,8 +18,12 @@ const ENTER_KEY_CODE = 13;
 export default class DonorRegistrationForm extends Component {
 
   static propTypes = {
-    data: PropTypes.object.isRequired,
-    location: PropTypes.array.isRequired
+    donor: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    button: PropTypes.string.isRequired,
+    buttonIcon: PropTypes.string,
+    activeAfterSubmit: PropTypes.bool
   };
 
   state = {
@@ -31,6 +34,13 @@ export default class DonorRegistrationForm extends Component {
     emailAddress: '',
     bloodGroup: ''
   };
+
+  componentWillReceiveProps(props) {
+    if (!this.props.donor && props.donor) {
+      // parametrization arrived
+      this.setState({...this.state, ...props.donor});
+    }
+  }
 
   componentDidMount() {
     this.refs.firstNameInput.getWrappedInstance().focus();
@@ -46,7 +56,7 @@ export default class DonorRegistrationForm extends Component {
       <form
         className={styles['donor-registration-form']}
         onSubmit={this._onSubmit}>
-        <h1>Pin your location on the Donor's map</h1>
+        <h1>{this.props.title}</h1>
         <div className={styles.row}>
           <Input
             ref="firstNameInput"
@@ -99,8 +109,8 @@ export default class DonorRegistrationForm extends Component {
           disabled={isSubmitted}
         />
         <Button
-          label="Pin"
-          icon="add_location"
+          label={this.props.button}
+          icon={this.props.buttonIcon}
           raised primary
           disabled={isSubmitted || !isFormValid}
           onClick={this._onSubmit}
@@ -122,12 +132,11 @@ export default class DonorRegistrationForm extends Component {
   _onSubmit = (event) => {
     event.preventDefault();
 
-    this.setState({...this.state, isSubmitted: true});
+    if (!this.props.activeAfterSubmit) {
+      this.setState({...this.state, isSubmitted: true});
+    }
 
-    var donorData = Object.assign({}, this.state, {
-      loc: [this.props.location[0], this.props.location[1]] // lnglat
-    });
-
-    DonorActionCreators.submitDonorData(donorData);
+    var donorData = Object.assign({}, this.state);
+    this.props.onSubmit(donorData);
   };
 }

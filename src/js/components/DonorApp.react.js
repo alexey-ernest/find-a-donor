@@ -2,59 +2,39 @@
  * Donor App main component.
  */
 
-// CSS
-import styles from '../../sass/modules/donor-app.sass';
-
 // React
 import React, {Component, PropTypes} from 'react';
 
-import MyLocation from './MyLocation.react';
+// Router
+import { browserHistory, Router, Route, IndexRoute, useRouterHistory } from 'react-router';
+import { createHashHistory } from 'history';
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false });
 
-import {
-  LocationStore,
-  DonorStore,
-} from '../stores';
+import MapApp from './MapApp.react';
+import ManageDonorApp from './ManageDonorApp.react';
 
-import MapSection from './MapSection.react';
-
-const getStateFromStores = () => {
-  return {
-    location: LocationStore.get(),
-    newDonor: DonorStore.get().newDonor,
-    donors: DonorStore.get().donors
-  };
-};
-
-export default class DonorApp extends Component {
-
-  state = getStateFromStores();
-
-  componentDidMount() {
-    LocationStore.addChangeListener(this._onChange);
-    DonorStore.addChangeListener(this._onChange);
-  }
-
-  componentWillUnmount() {
-    LocationStore.removeChangeListener(this._onChange);
-    DonorStore.removeChangeListener(this._onChange);
-  }
-
+class Layout extends Component {
   render() {
     return (
-      <div className={styles['donor-app']}>
-        <MapSection data={this.state} />
-        <div className={styles['my-location-button']}>
-          <MyLocation data={this.state} />
-        </div>
+      <div>
+        {this.props.children}
       </div>
     );
   }
+}
 
-  /**
-   * Event handler for 'change' events coming from the stores
-   */
-  _onChange = () => {
-    this.setState(getStateFromStores());
+export default class DonorApp extends Component {
+
+  render() {
+    return (
+      <Router history={appHistory}>
+        <Route path="/" component={Layout}>
+          <IndexRoute component={MapApp} />
+          <Route path="donor/:id" component={ManageDonorApp} />
+          <Route path="*" component={MapApp} />
+        </Route>
+      </Router>
+    );
   }
 
 };
