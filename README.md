@@ -66,6 +66,7 @@ Or using docker:
 $ docker run -d --name donor -e MONGODB_CONNECTION=mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname> -e DEBUG=find-a-donor:* -p 8080:8080 alexeyernest/find-a-donor
 ```
 
+Open in your browser
 ```
-Open http://localhost:8080 in your browser
+http://localhost:8080 
 ```
