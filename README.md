@@ -40,7 +40,7 @@ Before testing or running the service should be properly configured with followi
 
 Key | Value | Description
 :-- | :-- | :-- 
-MONGODB_CONNECTION | mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname> | MongoDB connection string for persisting donor's data.
+MONGODB_CONNECTION | `mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname>` | MongoDB connection string for persisting donor's data.
 
 ## Data structure
 Name | Type | Description
@@ -54,10 +54,10 @@ bloodGroup | String {0-,0+,A-,A+,B-,B+,AB-,AB+} | Donor's blood group.
 
 ## API
 
-## GET /api/donors/{id}
+### GET /api/donors/{id}
 Gets donor's data by id.
 
-### Response
+#### Response
 | HTTP       | Value     |
 |------------|-----------|
 | Body       | { "_id", "firstName", "lastName", "contactNumber", "emailAddress", "bloodGroup"} |
