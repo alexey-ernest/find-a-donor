@@ -3,6 +3,7 @@ A service for finding blood donors near you
 
 * [Tech Stack](#tech-stack)
 * [Architecture](#architecture)
+* [Environment Variables](#environment-variables)
 * [Data Structure](#data-structure)
 * [API](#api)
 * [Tests](#tests)
@@ -34,6 +35,13 @@ The application is built in client-server architecture with Node.js back-end and
 * User can click on any pin in the map and see the information about the donor: his name, blood group and contact information.
 * Contact information is initially hidden from bots and can be easily retrieved by clicking `show` link.
 
+# Environment Variables
+Before testing or running the service should be properly configured with following environment variables.
+
+Key | Value | Description
+:-- | :-- | :-- 
+MONGODB_CONNECTION | mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname> | MongoDB connection string for persisting donor's data.
+
 ## Data structure
 Name | Type | Description
 :-- | :-- | :-- 
@@ -46,7 +54,13 @@ bloodGroup | String {0-,0+,A-,A+,B-,B+,AB-,AB+} | Donor's blood group.
 
 ## API
 
+## GET /api/donors/{id}
+Gets donor's data by id.
 
+### Response
+| HTTP       | Value     |
+|------------|-----------|
+| Body       | { "_id", "firstName", "lastName", "contactNumber", "emailAddress", "bloodGroup"} |
 
 
 ## Tests
