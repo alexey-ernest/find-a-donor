@@ -29,9 +29,10 @@ The application is built in client-server architecture with Node.js back-end and
 * User can click on any pin in the map and see the information about the donor: his name, blood group and contact information.
 * Contact information is initially hidden from bots and can be easily retrieved by clicking `show` link.
 
+
 For better user experience the application can be improved:
 * By adding location search bar at the top of the map
-* By adding blood group filter for quick filtering donors by there blood group
+* By adding blood group filter for quick filtering donors by their blood group
 
 ## Tests
 
