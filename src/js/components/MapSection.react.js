@@ -24,7 +24,7 @@ import DonorRegistrationForm from './DonorRegistrationForm.react';
 import DonorInfo from './DonorInfo.react';
 
 import DonorActionCreators from '../actions/DonorActionCreators';
-import DonorAPIUtils from '../utils/DonorAPIUtils';
+import DonorSocketUtils from '../utils/DonorSocketUtils';
 import DonorConstants from '../constants/DonorConstants';
 
 
@@ -77,7 +77,7 @@ export default class MapSection extends Component {
     // requesting visible donors data
     var bl = [sw.lng, sw.lat],
         ur = [ne.lng, ne.lat];
-    DonorAPIUtils.findDonors(bl, ur);
+    DonorSocketUtils.findDonors(bl, ur);
   };
 
   _onMapClick = (event) => {
