@@ -47,7 +47,7 @@ Name | Type | Description
 :-- | :-- | :-- 
 firstName | String (Non-empty) | Donor's first name.
 lastName | String (Non-empty) | Donor's last name.
-contactNumber | String (+xx xxx xxxx xxx|00xx xxx xxxx xxx) | Donor's contact phone number.
+contactNumber | String (+xx xxx xxxx xxx&#124;00xx xxx xxxx xxx) | Donor's contact phone number.
 emailAddress | String (valid email address) | Donor's email address.
 bloodGroup | String {0-,0+,A-,A+,B-,B+,AB-,AB+} | Donor's blood group.
 
@@ -101,7 +101,7 @@ Updates donor data.
 
 
 ### DELETE /api/donors/{id}
-Delets donor data by id.
+Deletes donor by id.
 
 #### Response
 | HTTP       |  Value                                                             |
