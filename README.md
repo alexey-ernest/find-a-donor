@@ -101,7 +101,7 @@ Updates donor data.
 
 
 ### DELETE /api/donors/{id}
-Delets donor data by id.
+Deletes donor by id.
 
 #### Response
 | HTTP       |  Value                                                             |
