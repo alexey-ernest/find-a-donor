@@ -2,6 +2,7 @@
 A service for finding blood donors near you
 
 * [Tech Stack](#tech-stack)
+* [Architecture](#architecture)
 * [Tests](#tests)
 * [How to Run](#how-to-run)
 
@@ -11,6 +12,11 @@ A service for finding blood donors near you
 * Front-end -  React/Flux/React Router/React Toolbox (Material UI), SASS/SCSS/Compass/Breakpoint for CSS
 * Maps - Leaflet framework using react-leaflet components, map tiles from ArcGIS service
 * Tests - Mocha for API tests
+
+## Architecture
+
+<img src="assets/architecture.png">
+
 
 
 ## Tests
