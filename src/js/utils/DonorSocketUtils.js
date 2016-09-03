@@ -57,6 +57,7 @@ function findDonors(bl, ur) {
 
   // listening for donors updates
   socket.on('donorsUpdate', function () {
+    console.log('donors update');
     findDonors();
   });
 }
