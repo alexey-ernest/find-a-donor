@@ -49,6 +49,7 @@ For better user experience the application can be improved:
 
 ```
 $ npm install
+$ export MONGODB_CONNECTION=mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname>
 $ npm test
 ```
 
