@@ -31,7 +31,16 @@ The application is built in client-server architecture with Node.js back-end and
 * User can click on any pin in the map and see the information about the donor: his name, blood group and contact information.
 * Contact information is initially hidden from bots and can be easily retrieved by clicking `show` link.
 
+### Data structure
+Name | Type | Description
+:-- | :-- | :-- 
+firstName | String (Non-empty) | Donor's first name.
+lastName | String (Non-empty) | Donor's last name.
+contactNumber | String (+xx xxx xxxx xxx|00xx xxx xxxx xxx) | Donor's contact phone number.
+emailAddress | String (valid email address) | Donor's email address.
+bloodGroup | String {0-,0+,A-,A+,B-,B+,AB-,AB+} | Donor's blood group.
 
+### Missing requirements
 For better user experience the application can be improved:
 * By adding location search bar at the top of the map
 * By adding blood group filter for quick filtering donors by their blood group
@@ -40,6 +49,7 @@ For better user experience the application can be improved:
 
 ```
 $ npm install
+$ export MONGODB_CONNECTION=mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname>
 $ npm test
 ```
 
@@ -48,7 +58,8 @@ $ npm test
 Using npm:
 ```
 $ npm install
-$ npm build
+$ npm run build
+$ export MONGODB_CONNECTION=mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname>
 $ npm start
 ```
 
@@ -57,6 +68,7 @@ Or using docker:
 $ docker run -d --name donor -e MONGODB_CONNECTION=mongodb://<dblogin>:<dbpass>@<dbserver>:<dbport>/<dbname> -e DEBUG=find-a-donor:* -p 8080:8080 alexeyernest/find-a-donor
 ```
 
+Open in your browser
 ```
-Open http://localhost:8080 in your browser
+http://localhost:8080 
 ```
