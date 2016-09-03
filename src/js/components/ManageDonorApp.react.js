@@ -51,10 +51,11 @@ export default class ManageDonorApp extends Component {
       <div className={styles['manage-donor-app']}>
         <div className={styles['edit-donor']}>
           <h1 className={styles['go-to-map']}>
-            <Link to={'/'}>Donors on the Map</Link>
+            <Link to={'/'}>Go to Map</Link>
           </h1>
           <EditDonor
             donor={this.state.donor}
+            onDelete={this._onDelete}
           />
         </div>
       </div>
@@ -66,6 +67,10 @@ export default class ManageDonorApp extends Component {
    */
   _onChange = () => {
     this.setState(getStateFromStores());
+  };
+
+  _onDelete = () => {
+    appHistory.push('/');
   };
 
 };

@@ -20,8 +20,10 @@ export default class DonorRegistrationForm extends Component {
   static propTypes = {
     donor: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
     title: PropTypes.string.isRequired,
     button: PropTypes.string.isRequired,
+    cancelButton: PropTypes.string,
     buttonIcon: PropTypes.string,
     activeAfterSubmit: PropTypes.bool
   };
@@ -52,10 +54,20 @@ export default class DonorRegistrationForm extends Component {
     var isSubmitted = this.state.isSubmitted;
     var groups = Object.keys(Validation.BLOOD_GROUPS);
 
+    var cancelButton;
+    if (this.props.cancelButton && this.props.onCancel) {
+      cancelButton = <Button
+                      label={this.props.cancelButton}
+                      raised
+                      disabled={isSubmitted}
+                      onClick={this.props.onCancel}
+                    />
+    }
+
     return (
       <form
         className={styles['donor-registration-form']}
-        onSubmit={this._onSubmit}>
+        onSubmit={this._onFormSubmit}>
         <h1>{this.props.title}</h1>
         <div className={styles.row}>
           <Input
@@ -115,6 +127,7 @@ export default class DonorRegistrationForm extends Component {
           disabled={isSubmitted || !isFormValid}
           onClick={this._onSubmit}
         />
+        &nbsp; {cancelButton}
       </form>
     );
   }
@@ -129,9 +142,11 @@ export default class DonorRegistrationForm extends Component {
     }
   };
 
-  _onSubmit = (event) => {
+  _onFormSubmit = (event) => {
     event.preventDefault();
+  };
 
+  _onSubmit = (event) => {
     if (!this.props.activeAfterSubmit) {
       this.setState({...this.state, isSubmitted: true});
     }

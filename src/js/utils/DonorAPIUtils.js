@@ -55,6 +55,22 @@ export default {
     });
   },
 
+ /**
+   * Delete donor.
+   *
+   * @param      {string}  id  Donor id.
+   */
+  deleteDonor: function (id) {
+
+    $.ajax({
+      type: 'DELETE',
+      url: URL + '/' + id,
+      success: function() {
+        DonorActionCreators.receiveDonor();
+      }
+    });
+  },
+
   /**
    * Finds donors in rectangular area defined by bottom-left and upper-right corners.
    *

@@ -14,7 +14,8 @@ import DonorAPIUtils from '../utils/DonorAPIUtils';
 export default class EditDonor extends Component {
 
   static propTypes = {
-    donor: PropTypes.object
+    donor: PropTypes.object,
+    onDelete: PropTypes.func
   };
 
   state = {
@@ -42,8 +43,10 @@ export default class EditDonor extends Component {
           <DonorRegistrationForm
             donor={this.props.donor}
             onSubmit={this._onSubmit}
+            onCancel={this._onDelete}
             title="Your donor account information"
             button={this.state.button}
+            cancelButton="Delete"
             activeAfterSubmit={true}
           />
         </CardText>
@@ -58,6 +61,14 @@ export default class EditDonor extends Component {
       submitted: true,
       button: 'Saving...'
     });
+  };
+
+  _onDelete = () => {
+    DonorAPIUtils.deleteDonor(this.props.donor._id);
+
+    if (this.props.onDelete) {
+      this.props.onDelete();
+    }
   };
 
 };
