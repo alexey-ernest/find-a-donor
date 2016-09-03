@@ -9,7 +9,7 @@ import React, {Component, PropTypes} from 'react';
 import {Card, CardTitle, CardText} from 'react-toolbox';
 
 import DonorRegistrationForm from './DonorRegistrationForm.react';
-import DonorAPIUtils from '../utils/DonorAPIUtils';
+import DonorSocketUtils from '../utils/DonorSocketUtils';
 
 export default class EditDonor extends Component {
 
@@ -55,7 +55,7 @@ export default class EditDonor extends Component {
   }
 
   _onSubmit = (data) => {
-    DonorAPIUtils.updateDonor(data);
+    DonorSocketUtils.updateDonor(data);
 
     this.setState({...this.state,
       submitted: true,
@@ -64,7 +64,7 @@ export default class EditDonor extends Component {
   };
 
   _onDelete = () => {
-    DonorAPIUtils.deleteDonor(this.props.donor._id);
+    DonorSocketUtils.deleteDonor(this.props.donor._id);
 
     if (this.props.onDelete) {
       this.props.onDelete();

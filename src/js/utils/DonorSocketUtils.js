@@ -21,11 +21,19 @@ loadscript(SOCKETS_URL, function () {
   socket = io(URL);
 });
 
-function findDonors (bl, ur) {
+
+function registerDonor (donorData) {
   if (!socket) {
     return;
   }
 
+  socket.emit('registerDonor', donorData);
+  socket.on('newDonor', function (donor) {
+    DonorActionCreators.receiveNewDonor(donor);
+  });
+}
+
+function findDonors(bl, ur) {
   // memoization
   var data;
   if (!bl || !ur) {
@@ -33,6 +41,13 @@ function findDonors (bl, ur) {
   } else {
     data = {bl: bl, ur: ur};
     findDonors.data = data;
+  }
+
+  if (!socket) {
+    setTimeout(function () {
+      findDonors();
+    }, 500);
+    return;
   }
 
   socket.emit('findDonors', data);
@@ -46,6 +61,42 @@ function findDonors (bl, ur) {
   });
 }
 
+function updateDonor(donorData) {
+  if (!socket) {
+    return;
+  }
+
+  socket.emit('updateDonor', donorData);
+  socket.on('donorUpdated', function (donor) {
+    DonorActionCreators.receiveDonor(donor);
+  });
+}
+
+function getDonor(id) {
+  if (!socket) {
+    setTimeout(function () {
+      getDonor(id);
+    }, 500);
+    return;
+  }
+
+  socket.emit('getDonor', id);
+  socket.on('donor', function (donor) {
+    DonorActionCreators.receiveDonor(donor);
+  });
+}
+
+function deleteDonor(id) {
+  if (!socket) {
+    return;
+  }
+
+  socket.emit('deleteDonor', id);
+  socket.on('donorDeleted', function () {
+    DonorActionCreators.receiveDonor();
+  });
+}
+
 export default {
 
   /**
@@ -53,16 +104,7 @@ export default {
    *
    * @param      {Object}  donorData  The donor data.
    */
-  registerDonor: function (donorData) {
-    if (!socket) {
-      return;
-    }
-
-    socket.emit('registerDonor', donorData);
-    socket.on('newDonor', function (donor) {
-      DonorActionCreators.receiveNewDonor(donor);
-    });
-  },
+  registerDonor: registerDonor,
 
   /**
    * Finds donors in rectangular area defined by bottom-left and upper-right corners.
@@ -70,20 +112,27 @@ export default {
    * @param      {[Number]}  bl      Bottom left corner coordinates.
    * @param      {[Number]}  ur      Upper right corner coordinates.
    */
-  findDonors: function (bl, ur) {
-    if (!socket) {
-      return;
-    }
+  findDonors: findDonors,
 
-    socket.emit('findDonors', {bl: bl, ur: ur});
-    socket.on('donors', function (donors) {
-      DonorActionCreators.receiveDonors(donors);
-    });
+  /**
+   * Update donor.
+   *
+   * @param      {Object}  donorData  The new donor data.
+   */
+  updateDonor: updateDonor,
 
-    // listening for donors updates
-    socket.on('donorsUpdate', function () {
+/**
+  * Get donor by id.
+  *
+  * @param      {string}  id      Donor id.
+  */
+  getDonor: getDonor,
 
-    });
-  }
+  /**
+   * Delete donor.
+   *
+   * @param      {string}  id  Donor id.
+   */
+  deleteDonor: deleteDonor
 
  };

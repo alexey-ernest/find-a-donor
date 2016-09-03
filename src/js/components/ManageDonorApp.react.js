@@ -14,7 +14,7 @@ import {createHashHistory} from 'history';
 const appHistory = useRouterHistory(createHashHistory)({ queryKey: false });
 
 import EditDonor from './EditDonor.react';
-import DonorAPIUtils from '../utils/DonorAPIUtils';
+import DonorSocketUtils from '../utils/DonorSocketUtils';
 
 import {
   DonorStore,
@@ -39,7 +39,7 @@ export default class ManageDonorApp extends Component {
 
     DonorStore.addChangeListener(this._onChange);
 
-    DonorAPIUtils.getDonor(this.props.params.id);
+    DonorSocketUtils.getDonor(this.props.params.id);
   }
 
   componentWillUnmount() {
