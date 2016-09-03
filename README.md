@@ -15,7 +15,7 @@ A service for finding blood donors near you
 
 ## Architecture
 
-<img src="assets/architecture.png" width="400">
+<img src="assets/architecture.png" width="600">
 
 
 
