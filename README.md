@@ -63,6 +63,52 @@ Gets donor's data by id.
 | Body       | { "_id", "firstName", "lastName", "contactNumber", "emailAddress", "bloodGroup"} |
 
 
+### POST /api/donors
+Registers a donor.
+
+#### Request
+
+| Body Param    | Description |
+|----------|-------------|
+| firstName    | First name       |
+| lastName | Last name    |
+| contactPhone | Phone number    |
+| emailAddress | Email address    |
+| bloodGroupd | Donor's blood group    |
+
+#### Response
+| HTTP       |  Value                                                             |
+|------------|--------------------------------------------------------------------|
+| Body       | { "_id", "firstName", "lastName", "contactNumber", "emailAddress", "bloodGroup"} |
+
+### PUT /api/donors/{id}
+Updates donor data.
+
+#### Request
+
+| Body Param    | Description |
+|----------|-------------|
+| firstName    | First name       |
+| lastName | Last name    |
+| contactPhone | Phone number    |
+| emailAddress | Email address    |
+| bloodGroupd | Donor's blood group    |
+
+#### Response
+| HTTP       |  Value                                                             |
+|------------|--------------------------------------------------------------------|
+| Body       | { "_id", "firstName", "lastName", "contactNumber", "emailAddress", "bloodGroup"} |
+
+
+### DELETE /api/donors/{id}
+Delets donor data by id.
+
+#### Response
+| HTTP       |  Value                                                             |
+|------------|--------------------------------------------------------------------|
+| Status Code       | 200 |
+
+
 ## Tests
 
 ```
