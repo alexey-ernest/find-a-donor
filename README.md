@@ -109,6 +109,19 @@ Delets donor data by id.
 | Status Code       | 200 |
 
 
+### GET /api/donors/find/{bllng},{bllat}/{urlng},{urlat}
+Finds donors in rectangular area.
+* bllng - bottom left corner longitude
+* bllat - bottom left corner latitude
+* urlng - upper right corner longitude
+* urlat - upper right corner latitude
+
+#### Response
+| HTTP       | Value     |
+|------------|-----------|
+| Body       | [{ "_id", "firstName", "lastName", "contactNumber", "emailAddress", "bloodGroup"}] |
+
+
 ## Tests
 
 ```
