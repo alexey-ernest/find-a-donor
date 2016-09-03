@@ -15,24 +15,25 @@ if (process.env.NODE_ENV === 'production') {
   URL = 'http://localhost:8080/'
 }
 
-// init socket.io
-var socket;
-loadscript(SOCKETS_URL, function () {
-  socket = io(URL);
-});
-
-
-function registerDonor (donorData) {
+/**
+ * Emits register donor event.
+ *
+ * @param      {Object}  donorData  The donor data.
+ */
+function registerDonor(donorData) {
   if (!socket) {
     return;
   }
 
   socket.emit('registerDonor', donorData);
-  socket.on('newDonor', function (donor) {
-    DonorActionCreators.receiveNewDonor(donor);
-  });
 }
 
+/**
+ * Emits findDonors event.
+ *
+ * @param      {[lng,lat]}  bl      Bottom left corner.
+ * @param      {[lng,lat]}  ur      Upper right corner.
+ */
 function findDonors(bl, ur) {
   // memoization
   var data;
@@ -50,29 +51,32 @@ function findDonors(bl, ur) {
     return;
   }
 
-  socket.emit('findDonors', data);
-  socket.on('donors', function (donors) {
-    DonorActionCreators.receiveDonors(donors);
-  });
+  if (!data) {
+    // first load and immediate call from socket event
+    return;
+  }
 
-  // listening for donors updates
-  socket.on('donorsUpdate', function () {
-    console.log('donors update');
-    findDonors();
-  });
+  socket.emit('findDonors', data);
 }
 
+/**
+ * Emits update donor event.
+ *
+ * @param      {Object}  donorData  Updated donor data.
+ */
 function updateDonor(donorData) {
   if (!socket) {
     return;
   }
 
   socket.emit('updateDonor', donorData);
-  socket.on('donorUpdated', function (donor) {
-    DonorActionCreators.receiveDonor(donor);
-  });
 }
 
+/**
+ * Emits get donor event.
+ *
+ * @param      {string}  id      Donor id.
+ */
 function getDonor(id) {
   if (!socket) {
     setTimeout(function () {
@@ -82,21 +86,65 @@ function getDonor(id) {
   }
 
   socket.emit('getDonor', id);
-  socket.on('donor', function (donor) {
-    DonorActionCreators.receiveDonor(donor);
-  });
 }
 
+/**
+ * Emits delete donor event.
+ *
+ * @param      {string}  id      Donor id.
+ */
 function deleteDonor(id) {
   if (!socket) {
     return;
   }
 
   socket.emit('deleteDonor', id);
+}
+
+/**
+ * Registers socket event handlers.
+ */
+function registerHandlers() {
+  socket.on('newDonor', function (donor) {
+    // donor registered
+    DonorActionCreators.receiveNewDonor(donor);
+  });
+
+  socket.on('donors', function (donors) {
+    // visible donors
+    DonorActionCreators.receiveDonors(donors);
+  });
+
+  socket.on('donor', function (donor) {
+    // requested donor data arrived
+    DonorActionCreators.receiveDonor(donor);
+  });
+
+  socket.on('donorUpdated', function (donor) {
+    // current donor data has been updated
+    DonorActionCreators.receiveDonor(donor);
+  });
+
   socket.on('donorDeleted', function () {
+    // current donor was deleted
     DonorActionCreators.receiveDonor();
   });
+
+  socket.on('donorsUpdate', function () {
+    // some donor data was updated
+    findDonors();
+  });
 }
+
+// init socket.io
+var socket;
+loadscript(SOCKETS_URL, function () {
+  socket = io(URL);
+
+  // register socket event handlers
+  registerHandlers();
+});
+
 
 export default {
 
