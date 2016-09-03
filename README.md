@@ -7,7 +7,7 @@ A service for finding blood donors near you
 
 ## Tech Stack
 * Language - JavaScript/ES6/ES7/Babel. React components are written on ES6/ES7 using Babel transpiler.
-* Back-end - Node.Js/Express.Js, Mongoose/MongoDB, Socket.io
+* Back-end - Node.js/Express.js, Mongoose/MongoDB, Socket.io
 * Front-end -  React/Flux/React Router/React Toolbox (Material UI), SASS/SCSS/Compass/Breakpoint for CSS
 * Maps - Leaflet framework using react-leaflet components, map tiles from ArcGIS service
 * Tests - Mocha for API tests
