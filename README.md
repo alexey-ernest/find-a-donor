@@ -3,8 +3,11 @@ A service for finding blood donors near you
 
 * [Tech Stack](#tech-stack)
 * [Architecture](#architecture)
+* [Data Structure](#data-structure)
+* [API](#api)
 * [Tests](#tests)
 * [How to Run](#how-to-run)
+* [Missing Requirements](#missing-requirements)
 
 <img src="assets/ss.png" width="600">
 
@@ -31,7 +34,7 @@ The application is built in client-server architecture with Node.js back-end and
 * User can click on any pin in the map and see the information about the donor: his name, blood group and contact information.
 * Contact information is initially hidden from bots and can be easily retrieved by clicking `show` link.
 
-### Data structure
+## Data structure
 Name | Type | Description
 :-- | :-- | :-- 
 firstName | String (Non-empty) | Donor's first name.
@@ -40,10 +43,11 @@ contactNumber | String (+xx xxx xxxx xxx|00xx xxx xxxx xxx) | Donor's contact ph
 emailAddress | String (valid email address) | Donor's email address.
 bloodGroup | String {0-,0+,A-,A+,B-,B+,AB-,AB+} | Donor's blood group.
 
-### Missing requirements
-For better user experience the application can be improved:
-* By adding location search bar at the top of the map
-* By adding blood group filter for quick filtering donors by their blood group
+
+## API
+
+
+
 
 ## Tests
 
@@ -72,3 +76,8 @@ Open in your browser
 ```
 http://localhost:8080 
 ```
+
+## Missing requirements
+For better user experience the application can be improved:
+* By adding location search bar at the top of the map
+* By adding blood group filter for quick filtering donors by their blood group
