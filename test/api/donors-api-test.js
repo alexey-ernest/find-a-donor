@@ -410,6 +410,13 @@ describe('/api/donors', function () {
         });
     });
 
+    it('should responds 404 for inexistent donor', function (done) {
+      request(app)
+        .put('/api/donors/57ccbef49f88ca19e800b800')
+        .send({})
+        .expect(404, done);
+    });
+
   });
 
   describe('GET /find/:bllng,:bllat/:urlng,:urlat', function () {
